@@ -7,12 +7,13 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
 
 // agrega un nuevo Usuario a la base de datos
 func NewUser(a fyne.App) {
-	w := GenerarVentana(a, "Nuevo Usuario", 400, 550, true)
+	w := GenerarVentana(a, "Nuevo Usuario", 400, 600, true)
 
 	Lnombre := widget.NewLabel("Nombre")
 	Enombre := widget.NewEntry()
@@ -39,6 +40,8 @@ func NewUser(a fyne.App) {
 		}
 	}
 
+	Lmsg := widget.NewLabel("")
+
 	btnGuardar := widget.NewButton("Guardar", func() {
 		user := DB.Usuarios{
 			Nombre:             Enombre.Text,
@@ -61,15 +64,22 @@ func NewUser(a fyne.App) {
 				Fecha_modificacion: Efecha.Text,
 				EstadoSesion:       "No Activo"}
 
-			// MensajeInformacion(w, "Agregando nuevo usuario", DB.InsertarNewUser(nuevoUsuario))
-			if MensajeValidacin(w, "agregado el usuario", DB.InsertarNewUser(nuevoUsuario)) == "ok" {
-				Enombre.SetPlaceHolder("")
-				Ecorreo.SetPlaceHolder("")
-				Econtraseña.SetPlaceHolder("")
-				Srol.ClearSelected()
-				Efecha.SetPlaceHolder("")
-				VerTablaDeUsurios(a)
-			}
+			dialog.ShowConfirm("Confirmar", "¿Seguro que desea agregar este usuario?", func(b bool) {
+				if b {
+					time.AfterFunc(1*time.Second, func() {
+						Lmsg.SetText(DB.InsertarNewUser(nuevoUsuario))
+						time.AfterFunc(3*time.Second, func() {
+							VerTablaDeUsurios(a)
+							Lmsg.SetText("")
+						})
+					})
+					Enombre.SetText("")
+					Ecorreo.SetText("")
+					Econtraseña.SetText("")
+					Srol.ClearSelected()
+					Efecha.SetText("")
+				}
+			}, w)
 		}
 	})
 
@@ -85,7 +95,8 @@ func NewUser(a fyne.App) {
 		radio,
 		Lfecha,
 		Efecha,
-		btnGuardar)
+		btnGuardar,
+		Lmsg)
 	w.SetContent(contenido)
 	w.Show()
 }

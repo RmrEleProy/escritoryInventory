@@ -23,7 +23,6 @@ func RevisarUser(user string) {
 
 // Valida los campos para el ingreso de los nuevos usuarios
 func ValidarCamposNewUser(user DB.Usuarios) string {
-	// rFecha, _ := regexp.Compile(`^\d{4}-\d{2}-\d{2}$`)
 	fechaLayout := "2/01/2006"
 	rCorreo := regexp.MustCompile(`(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))`)
 

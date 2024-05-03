@@ -41,8 +41,6 @@ func VentanaEditarU(a fyne.App, user DB.Usuarios) {
 				w.Close()
 			}
 		}, w)
-		// VentanaInventarios(a, "Administrador")
-		// w.Close()
 	})
 
 	contenido := container.NewVBox(labelNombre, entryNombre, labelEmail, entryEmail, labelContraseña, entryContraseña, labelRol, selecRol, BtnActualizar)
